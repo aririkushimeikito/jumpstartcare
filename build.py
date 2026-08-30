@@ -465,15 +465,18 @@ def services_grid(base, items=SERVICES, limit=None):
       </article>"""
     return f'<div class="grid grid-3">{cards}</div>'
 
-def page_hero(base, kicker, title, lead, trail):
+def page_hero(base, kicker, title, lead, trail, hero_img=None):
     crumbs = ""
     for i, (n, u) in enumerate(trail):
         if i < len(trail) - 1:
             crumbs += f'<a href="{u}">{n}</a><span>/</span>'
         else:
             crumbs += f'<span>{n}</span>'
+    bg = img(base, hero_img, kicker + " at Jumpstart Medical, Flushing NY",
+             cls="hero-bg", lazy=False, sizes="100vw") if hero_img else ""
     return f"""
 <section class="page-hero">
+  {bg}
   <div class="wrap">
     <div class="breadcrumb">{crumbs}</div>
     <span class="kicker">{kicker}</span>
@@ -717,7 +720,7 @@ def build_services():
     body = page_hero(base, "What We Offer",
         "A Full Range of Primary, Urgent &amp; Telehealth Services",
         "From wellness visits and joint injections to EKGs, weight loss, and no-fault insurance care — comprehensive medicine for adults in Flushing, all under one roof.",
-        trail) + f"""
+        trail, "primary-care-consultation-queens") + f"""
 <section class="section">
   <div class="wrap">
     <div class="stats reveal" style="margin-bottom:3rem">
@@ -745,14 +748,15 @@ def build_services():
 # SERVICE DETAIL PAGES
 # ----------------------------------------------------------------------------
 def service_detail(folder, active_token, kicker, title, hero_img, lead,
-                   intro_paras, points, meta_title, meta_desc, treat_heading, treat_items):
+                   intro_paras, points, meta_title, meta_desc, treat_heading, treat_items,
+                   hero_bg="primary-care-consultation-queens"):
     base = "../../"
     canonical = SITE + "/services/" + folder + "/"
     trail = [("Home", L(base, "")), ("Services", L(base, "services/")), (kicker, canonical)]
     pts = "".join(f'<li>{icon("check")}<span>{p}</span></li>' for p in points)
     treat = "".join(f'<li>{icon("check")}<span>{t}</span></li>' for t in treat_items)
     intro = "".join(f"<p>{p}</p>" for p in intro_paras)
-    body = page_hero(base, kicker, title, lead, trail) + f"""
+    body = page_hero(base, kicker, title, lead, trail, hero_bg) + f"""
 <section class="section">
   <div class="wrap">
     <div class="split">
@@ -807,7 +811,8 @@ def build_service_pages():
         "Book a telemedicine visit with a board-certified doctor in Queens, NY. Secure video care for sick visits, refills, chronic conditions, and weight loss — available across New York. Call (917) 932-2315.",
         "Great For", ["Sick visits &amp; cold/flu symptoms", "Chronic disease follow-ups (diabetes, hypertension, asthma)",
                       "Prescription renewals &amp; specialist referrals", "GLP-1 weight loss management &amp; dietary guidance",
-                      "Reviewing lab results", "Medication questions"])
+                      "Reviewing lab results", "Medication questions"],
+        hero_bg="telehealth-service-support")
 
     service_detail(
         "urgent-care-clinic-queens-ny", "services/",
@@ -822,7 +827,8 @@ def build_service_pages():
         "Same-day and walk-in urgent care in Flushing, Queens NY. Fevers, infections, minor injuries, and more — seen by a board-certified physician. Call (917) 932-2315.",
         "We Treat", ["Fevers, colds, flu &amp; COVID-19", "Sore throat, ear &amp; sinus infections",
                      "Minor cuts, burns &amp; sprains", "Urinary tract infections",
-                     "Rashes &amp; allergic reactions", "Stomach bugs &amp; dehydration"])
+                     "Rashes &amp; allergic reactions", "Stomach bugs &amp; dehydration"],
+        hero_bg="flushing-clinic-exam-room")
 
     service_detail(
         "weight-loss-in-flushing-ny", "services/weight-loss-in-flushing-ny/",
@@ -837,7 +843,8 @@ def build_service_pages():
         "Physician-supervised medical weight loss in Flushing, NY. GLP-1 programs including Wegovy, Ozempic, Mounjaro, and Zepbound with weekly check-ins. Call (917) 932-2315.",
         "Program Includes", ["Comprehensive health evaluation", "Personalized GLP-1 prescription plan",
                              "Weekly progress check-ins", "Nutrition &amp; lifestyle guidance",
-                             "Dose adjustments as you progress", "In-person or telehealth support"])
+                             "Dose adjustments as you progress", "In-person or telehealth support"],
+        hero_bg="weight-loss-consultation")
 
 # ----------------------------------------------------------------------------
 # ABOUT
@@ -858,7 +865,7 @@ def build_about():
     body = page_hero(base, "About Jumpstart Medical",
         "Meet " + DOCTOR + ", Your Flushing Family Physician",
         "A board-certified physician caring for the Queens community since 2013 — with the time, attention, and cultural understanding every patient deserves.",
-        trail) + f"""
+        trail, "medical-team-jumpstart") + f"""
 <section class="section">
   <div class="wrap">
     <div class="split">
@@ -912,7 +919,7 @@ def build_contact():
     body = page_hero(base, "Contact Us",
         "Book a Visit or Get in Touch",
         "Call, book online, or stop by our Flushing office. New patients are always welcome — in person or by telehealth.",
-        trail) + f"""
+        trail, "medical-team-collaboration") + f"""
 <section class="section">
   <div class="wrap">
     <div class="contact-grid">
@@ -995,7 +1002,7 @@ def build_blog():
     body = page_hero(base, "Health Journal",
         "Practical Health Tips From Jumpstart Medical",
         "Guidance on telehealth, weight loss, chronic care, and staying well — written for the Flushing community by Dr. Islam's team.",
-        trail) + f"""
+        trail, "health-counseling-flushing") + f"""
 <section class="section">
   <div class="wrap"><div class="grid grid-3">{cards}</div></div>
 </section>
@@ -1028,7 +1035,7 @@ def build_self_assessment():
     body = page_hero(base, "Self Assessment",
         "Not Sure What Kind of Visit You Need?",
         "Answer a few quick questions to figure out the right next step — then book in seconds or call us and we'll guide you.",
-        trail) + f"""
+        trail, "chronic-disease-blood-pressure-check") + f"""
 <section class="section">
   <div class="wrap">
     <div class="section-head center"><span class="kicker center">Quick Check</span><h2>Do Any of These Sound Like You?</h2><p class="lead">If you recognize yourself below, we can help — often the same day.</p></div>
@@ -1066,7 +1073,7 @@ def build_academy():
     body = page_hero(base, "Jumpstart Academy",
         "Learn to Take Charge of Your Health",
         "Clear, trustworthy education from Dr. Islam's team — so you understand your body, your options, and your care.",
-        trail) + f"""
+        trail, "compassionate-patient-care") + f"""
 <section class="section">
   <div class="wrap">
     <div class="section-head center"><span class="kicker center">Learn</span><h2>Featured Topics</h2><p class="lead">Practical, plain-language health education for patients and families.</p></div>
@@ -1104,7 +1111,9 @@ def build_academy():
 def build_404():
     base = ""
     body = f"""
-<section class="page-hero"><div class="wrap" style="text-align:center">
+<section class="page-hero">
+  {img(base, "flushing-clinic-exam-room", "Jumpstart Medical, Flushing NY", cls="hero-bg", lazy=False, sizes="100vw")}
+  <div class="wrap" style="text-align:center">
   <span class="kicker center">404</span>
   <h1 style="margin-inline:auto">This Page Took a Sick Day.</h1>
   <p class="lead" style="margin-inline:auto">The page you're looking for can't be found — but we're still here to help.</p>
