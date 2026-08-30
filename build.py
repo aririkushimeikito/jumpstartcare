@@ -67,13 +67,13 @@ def star_row(n=5):
 SERVICES = [
     ("telemedicine-virtual-care", "Telemedicine Visits", "TELEMEDICINE", "",
      "See Dr. Islam by secure video for sick visits, follow-ups, and refills — no commute, no waiting room, available across New York."),
-    ("urgent-care-consultation", "Urgent Care Visits", "URGENT CARE", "emerald",
+    ("urgent-care-consultation", "Urgent Care Visits", "URGENT CARE", "",
      "Same-day and walk-in care for fevers, infections, minor injuries, and conditions that need prompt attention."),
     ("primary-care-consultation-queens", "Preventive Health", "", "",
      "Annual physicals, wellness exams, screenings, and personalized plans to keep you healthy for the long run."),
     ("chronic-disease-blood-pressure-check", "Chronic Disease Management", "", "",
      "Ongoing care for diabetes, hypertension, high cholesterol, thyroid conditions, and more."),
-    ("weight-loss-nutrition-flushing", "Weight Loss Management", "POPULAR", "ink",
+    ("weight-loss-nutrition-flushing", "Weight Loss Management", "", "",
      "Medically supervised weight loss with GLP-1 options like Wegovy, Ozempic, Mounjaro, and Zepbound, plus weekly check-ins."),
     ("ekg-electrocardiogram-test", "EKG / Electrocardiogram", "", "",
      "In-office heart-rhythm testing to evaluate palpitations, chest discomfort, and cardiac risk."),
@@ -81,7 +81,7 @@ SERVICES = [
      "Quick vision screening to check acuity and flag changes that may need a specialist referral."),
     ("surgical-clearance-exam", "Surgical Clearance", "", "",
      "Pre-operative evaluations and medical clearance so your upcoming procedure stays on schedule."),
-    ("health-lab-blood-work", "No-Fault Insurance Visits", "NO-FAULT CARE", "emerald",
+    ("health-lab-blood-work", "No-Fault Insurance Visits", "NO-FAULT CARE", "",
      "Medical evaluation for motor-vehicle-accident injuries, billed directly to your NY no-fault (PIP) insurer."),
     ("womens-health-consultation", "Women's Health", "", "",
      "Well-woman visits, screenings, and preventive care in a comfortable, respectful setting."),
@@ -114,11 +114,11 @@ REVIEWS = [
 ]
 
 FAQS = [
-    ("How does a telemedicine visit work?",
+    ("How does telemedicine work?",
      "You book online or by phone, then connect with Dr. Islam over a secure video link at your appointment time — no app download hassle and no waiting room. It's ideal for sick visits, follow-ups, prescription refills, and reviewing results. Telehealth is available to patients located anywhere in New York State."),
-    ("What can be treated with urgent care or telehealth?",
+    ("What can be treated via telemedicine?",
      "Colds and flu, minor infections, rashes, allergies, prescription refills, medication questions, and chronic-condition check-ins are all a great fit. For anything that needs hands-on evaluation or lab work, we'll have you come into the Flushing office — often the same day."),
-    ("Do you see walk-in or same-day urgent care patients?",
+    ("Do you see walk-in or urgent care patients?",
      "Yes. Same-day and walk-in appointments are available for acute conditions during office hours. Calling ahead at " + PHONE_DISPLAY + " helps us reduce your wait, but walk-ins are always welcome."),
     ("What is no-fault insurance and how does it work?",
      "New York no-fault (PIP) insurance covers medical expenses after a motor vehicle accident, regardless of who was at fault. Jumpstart Medical evaluates your injuries and bills the insurer directly — at no out-of-pocket cost to you."),
@@ -336,18 +336,23 @@ def reviews_section(base):
   </div>
 </section>"""
 
-def insurance_section(base):
+def insurance_section(base, dark=False):
     pills = "".join(f'<div class="ins-pill">{i}</div>' for i in INSURERS[:12])
+    sec_cls = "section band-dark" if dark else "section"
+    sec_style = "" if dark else ' style="background:var(--paper)"'
+    lead_cls = "lead" if not dark else "lead"
+    btn_cls = "btn btn-ghost-light" if dark else "btn btn-outline"
+    head_extra = ' on-dark' if dark else ''
     return f"""
-<section class="section" style="background:var(--paper)">
-  <div class="wrap">
+<section class="{sec_cls}"{sec_style}>
+  <div class="wrap{head_extra}">
     <div class="section-head center">
       <span class="kicker center">Insurance</span>
       <h2>We Accept NYC's Top Insurance Plans</h2>
-      <p class="lead">We work with most major medical and no-fault plans across New York City. Not sure about yours? We'll verify it for you.</p>
+      <p class="{lead_cls}">We work with the most widely-used plans across New York City — Medicaid managed care, Medicare, no-fault, workers' comp, and self-pay. Call us to verify your coverage.</p>
     </div>
     <div class="ins-grid" style="margin-top:2.4rem">{pills}</div>
-    <p class="center" style="margin-top:2rem"><a class="btn btn-outline" href="tel:{PHONE_TEL}">{icon('phone')} Call to Verify Coverage</a></p>
+    <p class="center" style="margin-top:2rem"><a class="{btn_cls}" href="tel:{PHONE_TEL}">{icon('phone')} Call to Verify Coverage</a></p>
   </div>
 </section>"""
 
@@ -375,7 +380,7 @@ def trust_strip():
         ("shield", "Board-Certified Physician"),
         ("video", "Telemedicine Available"),
         ("clock", "Same-Day Urgent Care"),
-        ("car", "No-Fault Accident Care"),
+        ("car", "No-Fault Insurance"),
         ("wallet", "We Bill Insurance Plans"),
     ]
     inner = "".join(f'<div class="trust-item">{icon(i)}<span>{t}</span></div>' for i, t in items)
@@ -498,41 +503,33 @@ def build_home():
     hours_rows = "".join(
         f'<div class="hours-row"><span>{d}</span><span>{t}</span></div>' for d, t in HOURS)
 
-    why_feats = [
-        ("01", "Board-Certified Physician", f"Care led by {DOCTOR}, in practice since 2013 and affiliated with Long Island Jewish Medical Center."),
-        ("02", "In-Person &amp; Telemedicine", "Choose the visit that fits your day — the same expert care in our Flushing office or by secure video."),
-        ("03", "One-Stop Care, No Runaround", "Primary care, urgent visits, labs, EKG, and weight loss all under one roof — no bouncing between offices."),
-        ("04", "Culturally Competent Care", "Dr. Islam speaks English, Bengali, Urdu, and Hindi — caring for the diverse community of Queens."),
+    tele_cards = [
+        ("Sick visits &amp; cold/flu symptoms", "Fast video care for everyday illness."),
+        ("Chronic disease follow-ups", "Diabetes, hypertension &amp; asthma check-ins by video."),
+        ("Prescription renewals &amp; referrals", "Refills and specialist referrals, handled remotely."),
+        ("Weight loss consultation", "GLP-1 management &amp; dietary guidance."),
     ]
-    feats = "".join(
-        f'<div class="feat reveal"><span class="fnum">{n}</span><h3>{t}</h3><p>{d}</p></div>'
-        for n, t, d in why_feats)
+    tele_card_html = "".join(
+        f'<div class="tele-card">{icon("check")}<div><b>{t}</b><span>{s}</span></div></div>'
+        for t, s in tele_cards)
 
-    tiles = [
-        ("primary-care-consultation-queens", "Primary &amp; Preventive Care", "Wellness exams, screenings, and chronic-care management to keep you healthy year-round."),
-        ("urgent-care-vitals", "Urgent &amp; Same-Day Care", "Walk-in care for fevers, infections, and minor injuries — often seen the same day."),
-        ("telehealth-service-support", "Telemedicine", "Secure video visits with Dr. Islam from home, work, or anywhere in New York."),
-    ]
-    tile_html = "".join(
-        f"""<a class="svc-tile reveal" href="{L(base,'services/')}">{img(base, s, t.replace('&amp;','and'), sizes='(max-width:860px) 100vw, 33vw')}<div class="svc-inner"><h3>{t}</h3><p>{d}</p></div></a>"""
-        for s, t, d in tiles)
-
-    tele_uses = ["Sick visits &amp; cold/flu symptoms", "Chronic disease follow-ups",
-                 "Prescription renewals &amp; referrals", "Weight loss consultations"]
-    tele_list = "".join(f'<li>{icon("check")}<span>{u}</span></li>' for u in tele_uses)
-
-    provide = ["Same-day evaluation after an accident", "Direct billing to your no-fault insurer",
-               "Full documentation for your claim", "Injury assessment &amp; treatment plan",
-               "Referrals to specialists &amp; imaging", "Zero out-of-pocket cost to you"]
+    provide = ["Initial medical evaluation &amp; documentation",
+               "Injury diagnosis &amp; treatment planning",
+               "EKG &amp; diagnostic testing on-site",
+               "Referrals to specialists, PT &amp; imaging",
+               "Ongoing follow-up visits",
+               "Medical reports for legal proceedings",
+               "Direct billing &mdash; no cost to you"]
     provide_html = "".join(f'<li>{icon("check")}<span>{p}</span></li>' for p in provide)
 
-    reasons = ["A board-certified physician who takes the time to listen",
-               "In-person and telemedicine care on your schedule",
-               "One-stop care — labs, EKG, and weight loss in-house",
-               "Culturally competent care in multiple languages"]
-    reason_list = "".join(f'<li>{icon("check")}<span>{r}</span></li>' for r in reasons)
-
-    areas_chips = "".join(f'<span class="chip">{a}</span>' for a in AREAS)
+    reasons = [
+        ("Board-certified physician", f"{DOCTOR} brings years of experience to every visit, whether in person or by video."),
+        ("In-person and telemedicine care", "See us in Flushing or connect from anywhere in New York — same trusted physician, same care."),
+        ("One-stop care &mdash; no runaround", "Labs, injections, minor procedures, vitals, and surgical clearances all in one place."),
+        ("Culturally competent care", "Our team understands the Flushing community and provides care that respects every patient's background."),
+    ]
+    reasons_html = "".join(
+        f'<li>{icon("check")}<div><b>{t}</b><span>{d}</span></div></li>' for t, d in reasons)
 
     body = f"""
 <section class="hero">
@@ -540,9 +537,9 @@ def build_home():
   <div class="wrap">
     <div class="hero-grid">
       <div>
-        <span class="hero-badge">Primary &middot; Urgent &middot; Telehealth &middot; Flushing, NY</span>
-        <h1>Primary Care in <em>Flushing, NY</em>, Delivered Personally.</h1>
-        <p class="hero-sub">Jumpstart Medical offers comprehensive primary, urgent, and telemedicine care for adults — from wellness visits and joint injections to EKGs, weight loss, and no-fault insurance visits — led by {DOCTOR}.</p>
+        <span class="hero-badge">Primary Care &middot; Flushing &amp; Queens, NY</span>
+        <h1>Primary Care in <em>Queens, NY</em>, Delivered Personally.</h1>
+        <p class="hero-sub">Jumpstart Medical offers comprehensive primary, urgent, and telemedicine care for adults &mdash; from wellness visits and joint injections to EKGs, weight loss, and no-fault insurance visits &mdash; in Flushing, NY.</p>
         <div class="hero-actions">
           <a class="btn btn-primary btn-lg" href="{ZOCDOC}" target="_blank" rel="noopener">{icon('pin')} Book In-Person</a>
           <a class="btn btn-ghost-light btn-lg" href="{L(base,'services/telemedicine-queens-ny/')}">{icon('video')} Start Telehealth</a>
@@ -560,54 +557,19 @@ def build_home():
 
 {trust_strip()}
 
-<section class="section">
+<section class="section band-dark">
   <div class="wrap">
     <div class="split">
-      <div class="split-media reveal">
-        {img(base, "medicine-that-listens", DOCTOR + ", board-certified family physician at Jumpstart Medical")}
-        <div class="badge-float"><span class="num">2013</span><small>In practice since — trusted care in Queens</small></div>
-      </div>
-      <div class="reveal">
-        <span class="kicker">Family-Owned Care Since 2013</span>
-        <h2>Care That Treats You Like a Person, Not a Chart.</h2>
-        <p class="lead">At Jumpstart Medical, {DOCTOR} builds real relationships with her patients. A board-certified family physician affiliated with Long Island Jewish Medical Center, she has cared for Flushing families since 2013.</p>
-        <p>From routine wellness and sick visits to weight management, minor injuries, and chronic-condition care, you get thorough, unhurried attention — in the language you're most comfortable speaking.</p>
-        <ul class="check-list">
-          <li>{icon('check')}<span>Board-certified family physician</span></li>
-          <li>{icon('check')}<span>English, Bengali, Urdu &amp; Hindi spoken</span></li>
-          <li>{icon('check')}<span>Same expert care in-person or by video</span></li>
-        </ul>
-        <p style="margin-top:1.6rem"><a class="btn btn-outline" href="{L(base,'about-us/')}">Meet {DOCTOR} &rarr;</a></p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section" style="background:var(--paper)">
-  <div class="wrap">
-    <div class="section-head center">
-      <span class="kicker center">What We Do</span>
-      <h2>Three Ways to Get the Care You Need</h2>
-      <p class="lead">In the office, same-day, or on screen — Jumpstart Medical meets you where you are.</p>
-    </div>
-    <div class="svc-tiles" style="margin-top:2.6rem">{tile_html}</div>
-  </div>
-</section>
-
-<section class="section band-dark" style="background:var(--ink-3)">
-  <div class="wrap">
-    <div class="split">
-      <div class="split-media reveal">{img(base, "telemedicine-virtual-care", "Telemedicine video visit with Dr. Islam at Jumpstart Medical")}</div>
       <div class="reveal on-dark">
         <span class="kicker">Telemedicine</span>
         <h2>See Dr. Islam From Anywhere.</h2>
-        <p class="lead">Can't make it into the office? Our secure telehealth platform connects you with {DOCTOR} by video for a wide range of conditions — no commute, no waiting room, the same expert care.</p>
-        <ul class="check-list">{tele_list}</ul>
+        <p class="lead">Can't make it into the office? Our secure telehealth platform connects you with {DOCTOR} by video for a wide range of conditions &mdash; no commute, no waiting room, the same expert care.</p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="{ZOCDOC}" target="_blank" rel="noopener">Schedule a Telehealth Visit</a>
-          <a class="btn btn-ghost-light" href="{L(base,'services/telemedicine-queens-ny/')}">Learn More</a>
+          <a class="btn btn-ghost-light" href="{ZOCDOC}" target="_blank" rel="noopener">Book Online</a>
         </div>
       </div>
+      <div class="reveal tele-cards">{tele_card_html}</div>
     </div>
   </div>
 </section>
@@ -617,7 +579,7 @@ def build_home():
     <div class="section-head center">
       <span class="kicker center">What We Offer</span>
       <h2>A Full Range of Primary, Urgent &amp; Telehealth Services</h2>
-      <p class="lead">Comprehensive care for adults — in person in Flushing or virtually, all under one roof.</p>
+      <p class="lead">Led by {DOCTOR}, Jumpstart Medical provides comprehensive care for adults &mdash; in person or virtually, all under one roof.</p>
     </div>
     <div style="margin-top:2.6rem">{services_grid(base)}</div>
     <p class="center" style="margin-top:2.4rem"><a class="btn btn-outline" href="{L(base,'services/')}">View All Services &rarr;</a></p>
@@ -630,7 +592,7 @@ def build_home():
       <div class="reveal on-dark">
         <span class="kicker">Motor Vehicle Accidents</span>
         <h2>Injured in an Accident? We Bill No-Fault Directly.</h2>
-        <p class="lead">New York no-fault (PIP) insurance covers your medical care after a car accident — regardless of who was at fault. We evaluate your injuries and bill the insurer directly, so you can focus on recovery.</p>
+        <p class="lead">New York no-fault (PIP) insurance covers your medical care after a car accident &mdash; regardless of who was at fault. We evaluate your injuries and bill the insurer directly, so you can focus on recovery.</p>
         <p style="margin-top:1.4rem"><a class="btn btn-primary" href="tel:{PHONE_TEL}">{icon('phone')} Call Today</a></p>
       </div>
       <div class="reveal on-dark">
@@ -647,17 +609,18 @@ def build_home():
       <div class="reveal">
         <span class="kicker">Why Jumpstart</span>
         <h2>Medicine That Listens, Care That Lasts.</h2>
-        <p class="lead">At Jumpstart Medical, we believe primary care should be accessible, comprehensive, and deeply personal — whether you're in our office or at home.</p>
-        <ul class="check-list">{reason_list}</ul>
+        <p class="lead">At Jumpstart Medical, we believe primary care should be accessible, comprehensive, and deeply personal &mdash; whether you're in our office or at home.</p>
+        <ul class="check-list reasons">{reasons_html}</ul>
       </div>
       <div class="reveal">
         <div class="reason-card">
           <div class="stars" aria-label="5 out of 5">{star_row()}</div>
           <div class="rating">5.0</div>
-          <p style="color:rgba(255,255,255,.8);margin:.4rem 0 0">Our patients say it best — rated 5.0 across dozens of reviews.</p>
+          <p style="color:rgba(255,255,255,.8);margin:.4rem 0 0">Our patients say it best &mdash; trusted by patients across Flushing.</p>
           <div class="same-day">
             <strong>Same-Day Visits</strong>
-            <p style="color:rgba(255,255,255,.75);margin:.3rem 0 0;font-size:.92rem">Walk in or book ahead — acute care when you need it.</p>
+            <p style="color:rgba(255,255,255,.75);margin:.3rem 0 .8rem;font-size:.92rem">Walk in or book ahead &mdash; acute care when you need it.</p>
+            <strong style="font-size:1rem">Most Insurance Accepted</strong>
           </div>
         </div>
       </div>
@@ -665,38 +628,9 @@ def build_home():
   </div>
 </section>
 
-<section class="section">
-  <div class="wrap">
-    <div class="split">
-      <div class="reveal">
-        <span class="kicker">Visit Us</span>
-        <h2>Visit Our Flushing Office on Booth Memorial Ave.</h2>
-        <p class="lead">Convenient, easy to reach, and welcoming — with same-day appointments and walk-ins during office hours.</p>
-        <div class="visit-hours">{hours_rows}</div>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="{MAPS}" target="_blank" rel="noopener">{icon('pin')} Get Directions</a>
-          <a class="btn btn-outline" href="tel:{PHONE_TEL}">{icon('phone')} Call the Office</a>
-        </div>
-      </div>
-      <div class="split-media reveal">{img(base, "flushing-clinic-exam-room", "Jumpstart Medical exam room in Flushing, Queens NY")}</div>
-    </div>
-  </div>
-</section>
-
 {reviews_section(base)}
 
-<section class="section" style="background:var(--paper)">
-  <div class="wrap">
-    <div class="section-head center">
-      <span class="kicker center">Service Area</span>
-      <h2>Proudly Serving Flushing &amp; All of Queens, NY</h2>
-      <p class="lead">In-person care in Flushing and telemedicine across New York State.</p>
-    </div>
-    <div class="chips">{areas_chips}</div>
-  </div>
-</section>
-
-{insurance_section(base)}
+{insurance_section(base, dark=True)}
 
 {faq_section(base)}
 
