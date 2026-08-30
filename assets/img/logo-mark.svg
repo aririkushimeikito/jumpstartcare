@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="Jumpstart Medical">
+  <circle cx="24" cy="24" r="23" fill="#0d2b28"/>
+  <path d="M6 25.5h9l3-6 5 12 4-9 2.5 3H42" fill="none" stroke="#de8168" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M24 12.5c-3.4-3.4-9-1.2-9 3.2 0 4 5 7.3 9 10.3 4-3 9-6.3 9-10.3 0-4.4-5.6-6.6-9-3.2z" fill="none" stroke="#1a8a63" stroke-width="2.2" stroke-linejoin="round" opacity="0"/>
+</svg>

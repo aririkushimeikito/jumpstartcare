@@ -1,0 +1,10 @@
+{
+  "name": "Jumpstart Medical",
+  "short_name": "Jumpstart",
+  "description": "Primary, urgent, and telemedicine care in Flushing, Queens NY.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8f5ef",
+  "theme_color": "#0d2b28",
+  "icons": [{ "src": "/assets/img/favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}
