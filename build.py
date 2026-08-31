@@ -853,7 +853,7 @@ def build_contact():
     body = page_hero(base, "Contact Us",
         "Book a Visit or Get in Touch",
         "Call, book online, or stop by our Flushing office. New patients are always welcome — in person or by telehealth.",
-        trail, "medical-team-collaboration") + f"""
+        trail, "contact-hero-stethoscope-laptop") + f"""
 <section class="section">
   <div class="wrap">
     <div class="contact-grid">
