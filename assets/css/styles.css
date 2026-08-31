@@ -385,15 +385,21 @@ p { margin: 0 0 1.1em; }
   .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
 }
 @media (max-width: 860px) {
-  .nav-links, .nav-cta .btn { display: none; }
+  .nav { flex-wrap: wrap; row-gap: 0; }
+  .nav-links, .nav-cta { display: none; }
   .nav-toggle { display: block; }
+  /* Open menu: links + CTA stack as full-width rows below the bar (no overlap) */
   .nav.open .nav-links {
-    display: flex; position: absolute; top: 74px; left: 0; right: 0; flex-direction: column;
-    background: var(--cream); padding: 1.2rem var(--gut) 1.8rem; gap: 1.1rem; border-bottom: 1px solid var(--line);
-    box-shadow: var(--shadow);
+    display: flex; flex-direction: column; align-items: stretch; text-align: center;
+    order: 3; flex-basis: 100%; width: 100%; gap: .2rem;
+    margin-top: .9rem; padding-top: .9rem; border-top: 1px solid var(--line);
   }
-  .nav.open .nav-cta .btn { display: inline-flex; }
-  .nav.open .nav-cta { position: absolute; top: 74px; left: 0; right: 0; }
+  .nav.open .nav-links a { padding: .85rem 0; font-size: 1.05rem; }
+  .nav.open .nav-links a::after { display: none; }
+  .nav.open .nav-cta {
+    display: flex; order: 4; flex-basis: 100%; width: 100%; margin: .4rem 0 1rem;
+  }
+  .nav.open .nav-cta .btn { display: inline-flex; width: 100%; }
   .hero-grid, .split, .contact-grid { grid-template-columns: 1fr; }
   .split.rev .split-media { order: 0; }
   .grid-3, .svc-tiles, .grid-2, .provide-list, .feat-grid, .ins-grid, .stats { grid-template-columns: 1fr 1fr; }
